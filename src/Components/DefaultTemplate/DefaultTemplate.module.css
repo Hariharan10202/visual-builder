@@ -1,0 +1,100 @@
+.container {
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header > h1 {
+  font-size: 40px;
+}
+
+.header > div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+}
+
+.header > div > span {
+  color: #535151;
+  font-weight: 600;
+  font-size: 25px;
+}
+
+.header > div > div {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header > div > div > div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.header > div > div > div > span:first-child {
+  color: #168964;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.metaHeader,
+.linerDetails {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: #d4398b;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.metaHeader > div,
+.linerDetails > div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+
+.metaHeader > div > span,
+.linerDetails > div > span {
+  color: white;
+  font-size: 14px;
+}
+
+.metaHeader > div > span:last-child,
+.linerDetails > div > span:last-child {
+  font-weight: 600;
+}
+
+.linerDetails {
+  background-color: #61467d;
+}
+
+.metaContainer {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+}
+.metaContainer > div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+}
+.metaContainer > div > span:first-child {
+  font-size: 14px;
+}
+
+.metaContainer > div > span:last-child {
+  color: #333333;
+  font-weight: 600;
+  font-size: 16px;
+}

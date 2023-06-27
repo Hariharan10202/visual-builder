@@ -1,0 +1,16 @@
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.active {
+  padding: 5px;
+  background-color: rgba(0, 0, 0, 0.149);
+  border-radius: 5px;
+}
+
+.app {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+}

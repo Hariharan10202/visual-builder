@@ -1,0 +1,108 @@
+.container {
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  row-gap: 30px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.inputContainer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.termsAndConditions > div {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch > span {
+  font-weight: 600;
+}
+
+.switch > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btnGrp {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.singleStep {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.customDetailsInputs {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 50px;
+}
+
+.success {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.success > h1 {
+  font-size: 20px;
+}
+
+.success > div > span:first-child {
+  color: #afafaf;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.success > div > span:last-child {
+  color: rgb(66, 165, 245);
+  font-weight: 600;
+  border-bottom: 1px dashed rgb(66, 165, 245);
+}
+
+.success > p {
+  color: #083a93;
+  border-radius: 5px;
+  background-color: #c8e3fd;
+  padding: 3px;
+}

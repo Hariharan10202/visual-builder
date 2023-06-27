@@ -1,0 +1,38 @@
+export const tableData = [
+  {
+    charges: "3rd Party Fee",
+    basic: "per_w/m",
+    unitprice: "INR_1",
+    quantity: 1,
+    amount: "INR_1",
+    amount_in_preferred_currency: "INR_1",
+    legName: "Main Freight",
+  },
+  {
+    charges: "2nd Party Fee",
+    basic: "per_w/m",
+    unitprice: "INR_1",
+    quantity: 1,
+    amount: "INR_1",
+    amount_in_preferred_currency: "INR_1",
+    legName: "Origin Charges",
+  },
+  {
+    charges: "3rd Party Fee",
+    basic: "per_w/m",
+    unitprice: "INR_1",
+    quantity: 1,
+    amount: "INR_1",
+    amount_in_preferred_currency: "INR_1",
+    legName: "Origin Custom Charges",
+  },
+  {
+    charges: "3rd Party Fee",
+    basic: "per_w/m",
+    unitprice: "INR_1",
+    quantity: 1,
+    amount: "INR_1",
+    amount_in_preferred_currency: "INR_1",
+    legName: "Destination Custom Charges",
+  },
+];
