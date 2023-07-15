@@ -6,6 +6,8 @@ import { Menu } from "primereact/menu";
 import { OverlayPanel } from "primereact/overlaypanel";
 import RemovedItems from "../../RemovedItems/RemovedItems";
 
+import { motion } from "framer-motion";
+
 import "./popoverstyles.css";
 
 const Meta = ({
@@ -24,8 +26,11 @@ const Meta = ({
   setRemovedLinerDetails,
   setRemovedCompanyDetails,
   setRemovedQuotationDetails,
+  companyDetailsRef,
 }) => {
   const [editableVisible, setEditableVisible] = useState(false);
+
+  const [isDataEditable, setIsDataEditable] = useState(false);
 
   const [clickRemoved, setClickRemoved] = useState([]);
   const [index, setIndex] = useState(null);
@@ -71,6 +76,7 @@ const Meta = ({
     fontStyle: "normal",
     fontWeight: "600",
   });
+
   const [dataValues, setDataValues] = useState({
     fontSize: "16px",
     color: "#333",
@@ -93,22 +99,6 @@ const Meta = ({
   const handleData = () => {
     // setEnableDataEditable(false);
   };
-
-  // const handleHoverLabelEnter = () => {
-  //   labelRef.current.style.color = "#685858";
-  // };
-
-  // const handleHoverDataEnter = () => {
-  //   dataRef.current.style.color = "#685858";
-  // };
-
-  // const handleHoverLabelLeave = () => {
-  //   labelRef.current.style.color = "#000";
-  // };
-
-  // const handleHoverDataLeave = () => {
-  //   dataRef.current.style.color = "#000";
-  // };
 
   const labelInputHandler = (e) => {
     const { name, value } = e.target;
@@ -209,17 +199,66 @@ const Meta = ({
     }
   };
 
+  const editDataHandler = () => {
+    setIsDataEditable(true);
+  };
+
+  const handleInputBlur = () => {
+    setIsDataEditable(false);
+  };
+
+  const handleChange = (e, obj) => {
+    obj.val = e.target.value;
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") setIsDataEditable(false);
+  };
+
+  const dragStyles = {
+    scale: 1.1,
+    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.505)",
+    zIndex: 999,
+    backgroundColor: "#ebe1e1",
+    padding: 10,
+    cursor: "drag",
+  };
+
   return (
-    <div
+    <motion.div
+      // drag
+      // whileDrag={dragStyles}
+      // initial={{ scale: 0 }}
+      // animate={{ scale: 1 }}
+      // exit={{ scale: 0, opacity: 0 }}
+      // transition={{
+      //   duration: 0.2,
+      // }}
       className={styles.container}
       onMouseLeave={() => setEditableVisible(false)}
     >
       <span ref={labelRef}>{label}</span>
-      <span ref={dataRef}>{data}</span>
+      {isDataEditable ? (
+        <input
+          className={styles.editableData}
+          defaultValue={obj.val}
+          onKeyDown={handleKeyPress}
+          onChange={(e) => handleChange(e, obj)}
+          type="text"
+        />
+      ) : (
+        <span
+          onDoubleClick={editDataHandler}
+          onBlur={handleInputBlur}
+          ref={dataRef}
+        >
+          {obj.val}
+        </span>
+      )}
       <span
         className={styles.editIconContainer}
         onMouseEnter={() => setEditableVisible(true)}
-        onClick={handleEdit}
+        onClick={(obj) => handleEdit(obj)}
       >
         <AiFillEdit className={styles.editIcon} />
       </span>
@@ -323,10 +362,7 @@ const Meta = ({
           onMouseLeave={() => setEditableVisible(false)}
         >
           <div>
-            <div
-            // onMouseEnter={handleHoverLabelEnter}
-            // onMouseLeave={handleHoverLabelLeave}
-            >
+            <div>
               <div>
                 <span onClick={handleLabel} className={styles.label}>
                   Label
@@ -456,7 +492,7 @@ const Meta = ({
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

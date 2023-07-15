@@ -1,0 +1,102 @@
+.addWrapper {
+  transition: 0.2s ease-in-out;
+}
+
+.addContentContainer {
+  position: relative;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.2s ease-in;
+}
+
+.configs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.configIcon {
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.2s ease-in;
+}
+
+.configIcon:hover {
+  transform: scale(130%);
+}
+
+.settings:hover {
+  transform: scale(130%) rotate(45deg);
+}
+
+.headings {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.paragraphs {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.contentContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.dropdown {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.23);
+  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.23);
+  z-index: 99;
+  background-color: white;
+  top: 40px;
+}
+
+.dropdown > div {
+  padding: 20px;
+  height: 52px;
+  transition: 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.headings,
+.paragraphs {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown > div:hover {
+  cursor: pointer;
+  background-color: #afafaf;
+}
+
+.dropdown > div > span {
+  pointer-events: none;
+}
+
+.headings:hover .removeIcon,
+.paragraphs:hover .removeIcon {
+  opacity: 1;
+  transform: scale(100%);
+  pointer-events: all;
+}
+
+.removeIcon {
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+  cursor: pointer;
+}

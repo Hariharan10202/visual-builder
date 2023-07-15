@@ -2,6 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./Sidebar.module.css";
 import { dataPoints } from "./dataPoints";
 import { MultiSelect } from "primereact/multiselect";
+// import { Slider } from "primereact/slider";
+import HeaderController from "../HeaderController/HeaderController";
+
+import { Checkbox } from "primereact/checkbox";
 
 const Navbar = ({
   setCompanyDetails,
@@ -18,35 +22,62 @@ const Navbar = ({
   removedQuotationDetails,
   setRemovedLinerDetails,
   removedLinerDetails,
+  selectedHeaderPoints,
+  setSelectedHeaderPoints,
+  setIsTemplateEditable,
+  isTemplateEditable,
 }) => {
   const [existing, setExisting] = useState([]);
+  const [totalItems, setTotalItems] = useState([]);
+  const [removedExisting, setRemovedExisting] = useState([]);
   const previousOptionsRef = useRef([]);
+
+  const removearr = [];
 
   useEffect(() => {
     setExisting(dataPoints);
-    // let companyList = [];
-    // let list = [];
-    // let linerList = [];
-    // let quoationList = [];
-    // dataPoints.forEach((element) => {
-    //   element.Meta.forEach((item) => {
-    //     list.push(item);
-    //     if (item.code === "CD") companyList.push(item);
-    //     if (item.code === "QD") quoationList.push(item);
-    //     if (item.code === "LD") linerList.push(item);
-    //   });
-    // });
-    // setCompanyDetails(companyList);
-    // setQuotationDetails(quoationList);
-    // setLinerDetails(linerList);
-    // setExistingItems(list);
+
+    let list = [];
+    dataPoints.forEach((element) => {
+      element.Meta.forEach((item) => {
+        list.push(item);
+      });
+    });
+    setExistingItems(list);
+    setTotalItems(list);
   }, [dataPoints]);
+
+  useEffect(() => {
+    setCompanyDetails(existingItems.filter((obj) => obj.code === "CD"));
+    setQuotationDetails(existingItems.filter((obj) => obj.code === "QD"));
+    setLinerDetails(existingItems.filter((obj) => obj.code === "LD"));
+  }, [existingItems]);
+
+  useEffect(() => {
+    setRemovedCompanyDetails(
+      removedExisting.filter((obj) => obj.code === "CD")
+    );
+    setRemovedQuotationDetails(
+      removedExisting.filter((obj) => obj.code === "QD")
+    );
+    setRemovedLinerDetails(removedExisting.filter((obj) => obj.code === "LD"));
+  }, [removedExisting]);
 
   // useEffect(() => {
   //   setExistingItems([...companyDetails, ...linerDetails, ...quotationDetails]);
   // }, [companyDetails, linerDetails, quotationDetails]);
 
   const handleSelectionChange = (e) => {
+    const hash = {};
+    for (const item of e.value) {
+      hash[item.name] = 1;
+    }
+    for (const item of totalItems) {
+      if (!hash[item.name]) {
+        removearr.push(item);
+      }
+    }
+
     // let count = 0;
 
     // dataPoints.forEach((element) => {
@@ -90,76 +121,29 @@ const Navbar = ({
       return !newSelectedOptions.includes(option);
     });
 
-    if (e.selectedOption.code === "CD") {
-      setRemovedCompanyDetails(
-        removedCompanyDetails.filter((item) => item !== e.selectedOption)
-      );
-      if (!companyDetails.includes(e.selectedOption))
-        setCompanyDetails([...companyDetails, e.selectedOption]);
-      else
-        setCompanyDetails(
-          companyDetails.filter((item) => item.name !== e.selectedOption.name)
-        );
-    }
-    if (e.selectedOption.code === "QD") {
-      setRemovedQuotationDetails(
-        removedQuotationDetails.filter((item) => item !== e.selectedOption)
-      );
-      if (!quotationDetails.includes(e.selectedOption))
-        setQuotationDetails([...quotationDetails, e.selectedOption]);
-      else
-        setQuotationDetails(
-          quotationDetails.filter((item) => item.name !== e.selectedOption.name)
-        );
-    }
-    if (e.selectedOption.code === "LD") {
-      setRemovedLinerDetails(
-        removedLinerDetails.filter((item) => item !== e.selectedOption)
-      );
-      if (!linerDetails.includes(e.selectedOption))
-        setLinerDetails([...linerDetails, e.selectedOption]);
-      else
-        setLinerDetails(
-          linerDetails.filter((item) => item.name !== e.selectedOption.name)
-        );
-    }
-    setExistingItems(newSelectedOptions);
-    previousOptionsRef.current = newSelectedOptions;
-    // console.log("Removed Options:", removedOptions);
-    if (removedOptions.length) {
-      if (removedOptions[0].code === "CD") {
-        setCompanyDetails(
-          companyDetails.filter((option) => removedOptions[0] !== option)
-        );
+    setExistingItems(e.value);
 
-        if (!removedCompanyDetails.includes(removedOptions[0]))
-          setRemovedCompanyDetails([
-            ...removedCompanyDetails,
-            ...removedOptions,
-          ]);
-      } else if (removedOptions[0].code === "QD") {
-        setQuotationDetails(
-          quotationDetails.filter((option) => removedOptions[0] !== option)
-        );
-        if (!removedQuotationDetails.includes(removedOptions[0]))
-          setRemovedQuotationDetails([
-            ...removedQuotationDetails,
-            ...removedOptions,
-          ]);
-      } else if (removedOptions[0].code === "LD") {
-        setLinerDetails(
-          linerDetails.filter((option) => removedOptions[0] !== option)
-        );
-        if (!removedLinerDetails.includes(removedOptions[0]))
-          setRemovedLinerDetails([...removedLinerDetails, ...removedOptions]);
-      }
-    }
+    const combinedArray = [...totalItems, ...e.value];
+
+    setRemovedExisting(removearr);
   };
+
+  // console.log(removedCompanyDetails);
+  // console.log(companyDetails);
+
+  // console.log(totalItems);
 
   return (
     <div className={styles.Sidebar}>
       <div className={styles.components}>
-        <div>
+        <div className={styles.multiselect}>
+          <label htmlFor="">Header Item</label>
+          <HeaderController
+            setSelectedHeaderPoints={setSelectedHeaderPoints}
+            selectedHeaderPoints={selectedHeaderPoints}
+          />
+        </div>
+        <div className={styles.multiselect}>
           <label htmlFor="">Existing Item</label>
           <MultiSelect
             value={[...companyDetails, ...quotationDetails, ...linerDetails]}
@@ -172,6 +156,16 @@ const Navbar = ({
             display="chip"
             style={{ width: "300px" }}
           />
+        </div>
+        <div className={styles.editable}>
+          <Checkbox
+            inputId="editable"
+            onChange={() => setIsTemplateEditable(!isTemplateEditable)}
+            checked={isTemplateEditable}
+          />
+          <label htmlFor="editable" className="ml-2">
+            Start Editing the template
+          </label>
         </div>
       </div>
     </div>

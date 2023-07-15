@@ -1,19 +1,35 @@
 import styled from "styled-components";
 
 export const ScreenContainer = styled.div`
+  position: relative;
   display: flex;
-  flex-direction: column;
   width: 100%;
   padding: 20px;
-  gap: 20px;
+  row-gap: 10px;
   flex-wrap: wrap;
+  height: 100vh;
+  overflow-y: scroll;
+`;
+
+export const MetaLevelWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
 `;
 
 export const MetaLeveContainer = styled.div`
+  width: 100%;
   display: flex;
   align-content: center;
-  gap: 40px;
+  justify-content: flex-start;
+  gap: 20px;
   flex-wrap: wrap;
+  padding: 10px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.244);
+  }
 `;
 
 export const CustomizablePopover = styled.div`

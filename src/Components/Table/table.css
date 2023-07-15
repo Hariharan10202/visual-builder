@@ -10,3 +10,8 @@
   align-items: center;
   justify-content: flex-end;
 }
+
+.p-rowgroup-header {
+  background-color: rgba(175, 146, 146, 0.292) !important;
+  color: #333 !important;
+}

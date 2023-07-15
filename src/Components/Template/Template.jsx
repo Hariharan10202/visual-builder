@@ -7,6 +7,10 @@ const Template = () => {
   const [component, setComponent] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("Hello");
 
+  const [isTemplateEditable, setIsTemplateEditable] = useState(true);
+
+  const [selectedHeaderPoints, setSelectedHeaderPoints] = useState(null);
+
   const [existingItems, setExistingItems] = useState([]);
 
   const [companyDetails, setCompanyDetails] = useState([]);
@@ -26,6 +30,8 @@ const Template = () => {
   return (
     <div className={styles.container}>
       <Sidebar
+        isTemplateEditable={isTemplateEditable}
+        setIsTemplateEditable={setIsTemplateEditable}
         existingItems={existingItems}
         setExistingItems={setExistingItems}
         removedCompanyDetails={removedCompanyDetails}
@@ -40,8 +46,14 @@ const Template = () => {
         setLinerDetails={setLinerDetails}
         linerDetails={linerDetails}
         setQuotationDetails={setQuotationDetails}
+        selectedHeaderPoints={selectedHeaderPoints}
+        setSelectedHeaderPoints={setSelectedHeaderPoints}
       />
       <Screen
+        isTemplateEditable={isTemplateEditable}
+        setIsTemplateEditable={setIsTemplateEditable}
+        selectedHeaderPoints={selectedHeaderPoints}
+        setSelectedHeaderPoints={setSelectedHeaderPoints}
         removedCompanyDetails={removedCompanyDetails}
         removedLinerDetails={removedLinerDetails}
         removedQuotationDetails={removedQuotationDetails}
@@ -55,10 +67,6 @@ const Template = () => {
         setCompanyDetails={setCompanyDetails}
         setLinerDetails={setLinerDetails}
       />
-      {/* <Config
-        selectedComponent={selectedComponent}
-        setSelectedComponent={setSelectedComponent}
-      /> */}
     </div>
   );
 };
