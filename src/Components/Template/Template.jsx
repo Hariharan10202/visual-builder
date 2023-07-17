@@ -4,12 +4,12 @@ import Sidebar from "../Sidebar/Sidebar";
 import Screen from "../Screen/Screen";
 
 const Template = () => {
-  const [component, setComponent] = useState([]);
-  const [selectedComponent, setSelectedComponent] = useState("Hello");
-
   const [isTemplateEditable, setIsTemplateEditable] = useState(true);
 
+  const [preview, setPreview] = useState(false);
+
   const [selectedHeaderPoints, setSelectedHeaderPoints] = useState(null);
+  const [selectedFooterPoints, setSelectedFooterPoints] = useState([]);
 
   const [existingItems, setExistingItems] = useState([]);
 
@@ -29,26 +29,30 @@ const Template = () => {
 
   return (
     <div className={styles.container}>
-      <Sidebar
-        isTemplateEditable={isTemplateEditable}
-        setIsTemplateEditable={setIsTemplateEditable}
-        existingItems={existingItems}
-        setExistingItems={setExistingItems}
-        removedCompanyDetails={removedCompanyDetails}
-        setRemovedCompanyDetails={setRemovedCompanyDetails}
-        removedQuotationDetails={removedQuotationDetails}
-        setRemovedQuotationDetails={setRemovedQuotationDetails}
-        removedLinerDetails={removedLinerDetails}
-        setRemovedLinerDetails={setRemovedLinerDetails}
-        companyDetails={companyDetails}
-        setCompanyDetails={setCompanyDetails}
-        quotationDetails={quotationDetails}
-        setLinerDetails={setLinerDetails}
-        linerDetails={linerDetails}
-        setQuotationDetails={setQuotationDetails}
-        selectedHeaderPoints={selectedHeaderPoints}
-        setSelectedHeaderPoints={setSelectedHeaderPoints}
-      />
+      {!preview && (
+        <Sidebar
+          isTemplateEditable={isTemplateEditable}
+          setIsTemplateEditable={setIsTemplateEditable}
+          existingItems={existingItems}
+          setExistingItems={setExistingItems}
+          removedCompanyDetails={removedCompanyDetails}
+          setRemovedCompanyDetails={setRemovedCompanyDetails}
+          removedQuotationDetails={removedQuotationDetails}
+          setRemovedQuotationDetails={setRemovedQuotationDetails}
+          removedLinerDetails={removedLinerDetails}
+          setRemovedLinerDetails={setRemovedLinerDetails}
+          companyDetails={companyDetails}
+          setCompanyDetails={setCompanyDetails}
+          quotationDetails={quotationDetails}
+          setLinerDetails={setLinerDetails}
+          linerDetails={linerDetails}
+          setQuotationDetails={setQuotationDetails}
+          selectedHeaderPoints={selectedHeaderPoints}
+          setSelectedHeaderPoints={setSelectedHeaderPoints}
+          selectedFooterPoints={selectedFooterPoints}
+          setSelectedFooterPoints={setSelectedFooterPoints}
+        />
+      )}
       <Screen
         isTemplateEditable={isTemplateEditable}
         setIsTemplateEditable={setIsTemplateEditable}
@@ -66,6 +70,10 @@ const Template = () => {
         setQuotationDetails={setQuotationDetails}
         setCompanyDetails={setCompanyDetails}
         setLinerDetails={setLinerDetails}
+        selectedFooterPoints={selectedFooterPoints}
+        setSelectedFooterPoints={setSelectedFooterPoints}
+        setPreview={setPreview}
+        preview={preview}
       />
     </div>
   );

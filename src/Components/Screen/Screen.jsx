@@ -22,6 +22,13 @@ import { BsCheckLg } from "react-icons/bs";
 import { InputTextarea } from "primereact/inputtextarea";
 
 import { AiFillCloseCircle } from "react-icons/ai";
+import FooterData from "../FooterData/FooterData";
+
+import { Button } from "primereact/button";
+import { FaPaintBrush } from "react-icons/fa";
+
+import { VscPreview } from "react-icons/vsc";
+import { LuEdit2 } from "react-icons/lu";
 
 const Screen = ({
   removedQuotationDetails,
@@ -40,10 +47,16 @@ const Screen = ({
   setSelectedHeaderPoints,
   setIsTemplateEditable,
   isTemplateEditable,
+  selectedFooterPoints,
+  setSelectedFooterPoints,
+  setPreview,
+  preview,
 }) => {
   const companyDetailsRef = useRef(null);
   const quotationDetailsRef = useRef(null);
   const linerDetailsRef = useRef(null);
+
+  const [headerVisibleProps, setHeaderVisibleProps] = useState(false);
 
   const [companyDetailsPropsVisible, setCompanyDetailsPropsVisible] =
     useState(false);
@@ -311,23 +324,27 @@ const Screen = ({
 
   const companyDetailsContentRef = useRef(null);
 
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [companyDropdown, setCompanyDropdown] = useState(false);
+  const [quotationDropdown, setQuotationDropdown] = useState(false);
+  const [linerDropdown, setLinerDropdown] = useState(false);
 
-  const [isElement, setIsElement] = useState("Header");
+  const [isCompanyElement, setIsCompanyElement] = useState("Header");
+  const [isQuotationElement, setIsQuotationElement] = useState("Header");
+  const [isLinerElement, setIsLinerElement] = useState("Header");
 
   const addContentHandler = () => {
     if (content) {
-      if (isElement === "Header") {
+      if (isCompanyElement === "Header") {
         const inputElement = document.createElement("span");
         inputElement.classList = styles.headings;
         inputElement.textContent = content;
-        setContents([...contents, { type: isElement, value: content }]);
-      } else if (isElement === "Paragraph") {
+        setContents([...contents, { type: isCompanyElement, value: content }]);
+      } else if (isCompanyElement === "Paragraph") {
         const inputElement = document.createElement("p");
         inputElement.classList = styles.paragraphs;
         inputElement.textContent = content;
 
-        setContents([...contents, { type: isElement, value: content }]);
+        setContents([...contents, { type: isCompanyElement, value: content }]);
       }
       setContent("");
     }
@@ -335,22 +352,22 @@ const Screen = ({
 
   const addQuotationHandler = () => {
     if (quotationContent) {
-      if (isElement === "Header") {
+      if (isQuotationElement === "Header") {
         const inputElement = document.createElement("span");
         inputElement.classList = styles.headings;
         inputElement.textContent = content;
         setQuotationContents([
           ...quotationContents,
-          { type: isElement, value: quotationContent },
+          { type: isQuotationElement, value: quotationContent },
         ]);
-      } else if (isElement === "Paragraph") {
+      } else if (isQuotationElement === "Paragraph") {
         const inputElement = document.createElement("p");
         inputElement.classList = styles.paragraphs;
         inputElement.textContent = content;
 
         setQuotationContents([
           ...quotationContents,
-          { type: isElement, value: quotationContent },
+          { type: isQuotationElement, value: quotationContent },
         ]);
       }
       setQuotationContent("");
@@ -359,22 +376,22 @@ const Screen = ({
 
   const addLinerContent = () => {
     if (linerContent) {
-      if (isElement === "Header") {
+      if (isLinerElement === "Header") {
         const inputElement = document.createElement("span");
         inputElement.classList = styles.headings;
         inputElement.textContent = content;
         setLinerContents([
           ...linerContents,
-          { type: isElement, value: linerContent },
+          { type: isLinerElement, value: linerContent },
         ]);
-      } else if (isElement === "Paragraph") {
+      } else if (isLinerElement === "Paragraph") {
         const inputElement = document.createElement("p");
         inputElement.classList = styles.paragraphs;
         inputElement.textContent = content;
 
         setLinerContents([
           ...linerContents,
-          { type: isElement, value: linerContent },
+          { type: isLinerElement, value: linerContent },
         ]);
       }
       setLinerContent("");
@@ -383,7 +400,6 @@ const Screen = ({
 
   const companyDetailsHoverEnter = () => {
     setCompanyDetailsHover(true);
-    setShowDropdown(false);
   };
 
   const companyDetailsHoverLeave = () => {
@@ -392,7 +408,6 @@ const Screen = ({
 
   const quotationDetailsHoverEnter = () => {
     setQuotationDetailsHover(true);
-    setShowDropdown(false);
   };
 
   const quotationDetailsHoverLeave = () => {
@@ -401,28 +416,25 @@ const Screen = ({
 
   const linerDetailsHoverEnter = () => {
     setLinerDetailsHover(true);
-    setShowDropdown(false);
   };
 
   const linerDetailsHoverLeave = () => {
     setLinerDetailsHover(false);
   };
 
-  // const companyDetailsContentHoverEnter = () => {
-  //   setCompanyDetailsContent(true);
-  // };
-
-  // const companyDetailsContentHoverLeave = () => {
-  //   setCompanyDetailsContent(false);
-  // };
-
-  const showDropdownHandler = () => {
-    setShowDropdown(true);
+  const addCompanyElementHandler = (e) => {
+    setIsCompanyElement(e.target.children[0].textContent);
+    setCompanyDropdown(false);
   };
 
-  const addElementHandler = (e) => {
-    setIsElement(e.target.children[0].textContent);
-    setShowDropdown(false);
+  const addQuotationElementHandler = (e) => {
+    setIsQuotationElement(e.target.children[0].textContent);
+    setQuotationDropdown(false);
+  };
+
+  const addLinerElementHandler = (e) => {
+    setIsLinerElement(e.target.children[0].textContent);
+    setLinerDropdown(false);
   };
 
   const removeContentHandler = (obj) => {
@@ -431,10 +443,38 @@ const Screen = ({
 
   return (
     <ScreenContainer className={styles.container}>
-      <TemplateHeader
-        selectedHeaderPoints={selectedHeaderPoints}
-        setSelectedHeaderPoints={setSelectedHeaderPoints}
-      />
+      <MetaLevelWrapper>
+        <AnimatePresence mode="sync">
+          {isTemplateEditable && (
+            <motion.div
+              layout
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+              transition={{
+                duration: 0.2,
+              }}
+              className={styles.editButton}
+            >
+              <AnimatePresence mode="sync">
+                <Button
+                  onClick={() => setHeaderVisibleProps(true)}
+                  label="Customize"
+                  className={styles.editButton}
+                >
+                  <FaPaintBrush />
+                </Button>
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <TemplateHeader
+          headerVisibleProps={headerVisibleProps}
+          setHeaderVisibleProps={setHeaderVisibleProps}
+          selectedHeaderPoints={selectedHeaderPoints}
+          setSelectedHeaderPoints={setSelectedHeaderPoints}
+        />
+      </MetaLevelWrapper>
       <StylesModal
         setStylesProps={setCompanyStylesProps}
         stylesProps={companyStylesProps}
@@ -442,7 +482,6 @@ const Screen = ({
         visible={companyDetailsPropsVisible}
       />
       <MetaLevelWrapper
-        onClick={handleCompanyDetailsSection}
         onMouseEnter={companyDetailsHoverEnter}
         onMouseLeave={companyDetailsHoverLeave}
       >
@@ -467,7 +506,7 @@ const Screen = ({
                   key={index}
                 >
                   {con.value}
-                  {con.value && (
+                  {con.value && isTemplateEditable && (
                     <AiFillCloseCircle
                       onClick={() => removeContentHandler(con)}
                       className={styles.removeIcon}
@@ -478,8 +517,9 @@ const Screen = ({
             ))}
           </motion.div>
         </AnimatePresence>
+
         <AnimatePresence mode="sync">
-          {companyDetailsHover && (
+          {isTemplateEditable && (
             <motion.div
               layout
               initial={{ scale: 0 }}
@@ -490,54 +530,68 @@ const Screen = ({
               }}
               className={styles.addContentContainer}
             >
-              {isElement === "Header" ? (
-                <InputText
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className={styles.addWrapper}
-                  placeholder="Add Header"
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addContentHandler();
-                  }}
-                />
-              ) : (
-                <InputTextarea
-                  autoResize
-                  value={content}
-                  placeholder="Add Paragraph"
-                  onChange={(e) => setContent(e.target.value)}
-                  rows={5}
-                  cols={30}
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addContentHandler();
-                  }}
-                />
-              )}
-              <AnimatePresence mode="sync">
-                {showDropdown && (
-                  <div className={styles.dropdown}>
-                    <div onClick={addElementHandler}>
-                      <span>Header</span>
-                    </div>
-                    <div onClick={addElementHandler}>
-                      <span>Paragraph</span>
-                    </div>
-                  </div>
+              <div className={styles.headingContainer}>
+                {isCompanyElement === "Header" ? (
+                  <InputText
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className={styles.addWrapper}
+                    placeholder="Add Header"
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addContentHandler();
+                    }}
+                  />
+                ) : (
+                  <InputTextarea
+                    autoResize
+                    value={content}
+                    placeholder="Add Paragraph"
+                    onChange={(e) => setContent(e.target.value)}
+                    rows={5}
+                    cols={30}
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addContentHandler();
+                    }}
+                  />
                 )}
-              </AnimatePresence>
-              <div className={styles.configs}>
-                <FiSettings
-                  className={`${styles.configIcon} ${styles.settings}`}
-                  onClick={showDropdownHandler}
-                />
-                <BsCheckLg
-                  className={styles.configIcon}
-                  onClick={addContentHandler}
-                />
+                <AnimatePresence mode="sync">
+                  {companyDropdown && (
+                    <div className={styles.dropdown}>
+                      <div onClick={addCompanyElementHandler}>
+                        <span>Header</span>
+                      </div>
+                      <div onClick={addCompanyElementHandler}>
+                        <span>Paragraph</span>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
+                <div className={styles.configs}>
+                  <FiSettings
+                    className={`${styles.configIcon} ${styles.settings}`}
+                    onClick={() => setCompanyDropdown(true)}
+                  />
+                  <BsCheckLg
+                    className={styles.configIcon}
+                    onClick={addContentHandler}
+                  />
+                </div>
+              </div>
+              <div>
+                {isTemplateEditable && (
+                  <Button
+                    onClick={() => setCompanyDetailsPropsVisible(true)}
+                    label="Customize"
+                    className={styles.editButton}
+                  >
+                    <FaPaintBrush />
+                  </Button>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
         {companyDetails.length > 0 && (
           <MetaLeveContainer ref={companyDetailsRef}>
             <AnimatePresence mode="sync">
@@ -588,7 +642,7 @@ const Screen = ({
                   key={index}
                 >
                   {con.value}
-                  {con.value && (
+                  {con.value && isTemplateEditable && (
                     <AiFillCloseCircle
                       onClick={() =>
                         setQuotationContents(
@@ -606,7 +660,7 @@ const Screen = ({
           </motion.div>
         </AnimatePresence>
         <AnimatePresence mode="sync">
-          {quotationDetailsHover && (
+          {isTemplateEditable && (
             <motion.div
               layout
               initial={{ scale: 0 }}
@@ -616,65 +670,71 @@ const Screen = ({
                 duration: 0.2,
               }}
               className={styles.addContentContainer}
-              // onMouseEnter={() => setQuotationDetailsContent(true)}
-              // onMouseLeave={() => setQuotationDetailsContent(false)}
             >
-              {isElement === "Header" ? (
-                <InputText
-                  value={quotationContent}
-                  onChange={(e) => setQuotationContent(e.target.value)}
-                  className={styles.addWrapper}
-                  placeholder="Add Header"
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addQuotationHandler();
-                  }}
-                />
-              ) : (
-                <InputTextarea
-                  autoResize
-                  value={quotationContent}
-                  placeholder="Add Paragraph"
-                  onChange={(e) => setQuotationContent(e.target.value)}
-                  rows={5}
-                  cols={30}
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addQuotationHandler();
-                  }}
-                />
-              )}
-              <AnimatePresence mode="sync">
-                {showDropdown && (
-                  <div className={styles.dropdown}>
-                    <div onClick={addElementHandler}>
-                      <span>Header</span>
-                    </div>
-                    <div onClick={addElementHandler}>
-                      <span>Paragraph</span>
-                    </div>
-                  </div>
+              <div className={styles.headingContainer}>
+                {isQuotationElement === "Header" ? (
+                  <InputText
+                    value={quotationContent}
+                    onChange={(e) => setQuotationContent(e.target.value)}
+                    className={styles.addWrapper}
+                    placeholder="Add Header"
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addQuotationHandler();
+                    }}
+                  />
+                ) : (
+                  <InputTextarea
+                    autoResize
+                    value={quotationContent}
+                    placeholder="Add Paragraph"
+                    onChange={(e) => setQuotationContent(e.target.value)}
+                    rows={5}
+                    cols={30}
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addQuotationHandler();
+                    }}
+                  />
                 )}
-              </AnimatePresence>
-              <div className={styles.configs}>
-                <FiSettings
-                  className={`${styles.configIcon} ${styles.settings}`}
-                  onClick={showDropdownHandler}
-                />
-                <BsCheckLg
-                  className={styles.configIcon}
-                  onClick={addQuotationHandler}
-                />
+                <AnimatePresence mode="sync">
+                  {quotationDropdown && (
+                    <div className={styles.dropdown}>
+                      <div onClick={addQuotationElementHandler}>
+                        <span>Header</span>
+                      </div>
+                      <div onClick={addQuotationElementHandler}>
+                        <span>Paragraph</span>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
+                <div className={styles.configs}>
+                  <FiSettings
+                    className={`${styles.configIcon} ${styles.settings}`}
+                    onClick={() => setQuotationDropdown(true)}
+                  />
+                  <BsCheckLg
+                    className={styles.configIcon}
+                    onClick={addQuotationHandler}
+                  />
+                </div>
+              </div>
+              <div>
+                {isTemplateEditable && (
+                  <Button
+                    onClick={() => setQuotationDetailsPropsVisible(true)}
+                    label="Customize"
+                    className={styles.editButton}
+                  >
+                    <FaPaintBrush />
+                  </Button>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
         {quotationDetails.length > 0 && (
-          <MetaLeveContainer
-            ref={quotationDetailsRef}
-            onClick={handlQuotationDetailsSection}
-            // onMouseEnter={quotationDetailsHoverEnter}
-            // onMouseLeave={quotationDetailsHoverLeave}
-          >
+          <MetaLeveContainer ref={quotationDetailsRef}>
             <AnimatePresence mode="sync">
               {quotationDetails.map((data, index) => (
                 <Meta
@@ -698,7 +758,6 @@ const Screen = ({
         setVisible={setLinerDetailsPropsVisible}
         visible={linerDetailsPropsVisible}
       />
-
       <MetaLevelWrapper
         onMouseEnter={() => setLinerDetailsHover(true)}
         onMouseLeave={() => setLinerDetailsHover(false)}
@@ -723,7 +782,7 @@ const Screen = ({
                   key={index}
                 >
                   {con.value}
-                  {con.value && (
+                  {con.value && isTemplateEditable && (
                     <AiFillCloseCircle
                       onClick={() =>
                         setLinerContents(
@@ -741,7 +800,7 @@ const Screen = ({
           </motion.div>
         </AnimatePresence>
         <AnimatePresence mode="sync">
-          {linerDetailsHover && (
+          {isTemplateEditable && (
             <motion.div
               layout
               initial={{ scale: 0 }}
@@ -751,62 +810,70 @@ const Screen = ({
                 duration: 0.2,
               }}
               className={styles.addContentContainer}
-              // onMouseEnter={() => setQuotationDetailsContent(true)}
-              // onMouseLeave={() => setQuotationDetailsContent(false)}
             >
-              {isElement === "Header" ? (
-                <InputText
-                  value={linerContent}
-                  onChange={(e) => setLinerContent(e.target.value)}
-                  className={styles.addWrapper}
-                  placeholder="Add Header"
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addLinerContent();
-                  }}
-                />
-              ) : (
-                <InputTextarea
-                  autoResize
-                  value={linerContent}
-                  placeholder="Add Paragraph"
-                  onChange={(e) => setLinerContent(e.target.value)}
-                  rows={5}
-                  cols={30}
-                  onKeyDown={(e) => {
-                    if (e.code === "Enter") addLinerContent();
-                  }}
-                />
-              )}
-              <AnimatePresence mode="sync">
-                {showDropdown && (
-                  <div className={styles.dropdown}>
-                    <div onClick={addElementHandler}>
-                      <span>Header</span>
-                    </div>
-                    <div onClick={addElementHandler}>
-                      <span>Paragraph</span>
-                    </div>
-                  </div>
+              <div className={styles.headingContainer}>
+                {isLinerElement === "Header" ? (
+                  <InputText
+                    value={linerContent}
+                    onChange={(e) => setLinerContent(e.target.value)}
+                    className={styles.addWrapper}
+                    placeholder="Add Header"
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addLinerContent();
+                    }}
+                  />
+                ) : (
+                  <InputTextarea
+                    autoResize
+                    value={linerContent}
+                    placeholder="Add Paragraph"
+                    onChange={(e) => setLinerContent(e.target.value)}
+                    rows={5}
+                    cols={30}
+                    onKeyDown={(e) => {
+                      if (e.code === "Enter") addLinerContent();
+                    }}
+                  />
                 )}
-              </AnimatePresence>
-              <div className={styles.configs}>
-                <FiSettings
-                  className={`${styles.configIcon} ${styles.settings}`}
-                  onClick={showDropdownHandler}
-                />
-                <BsCheckLg
-                  className={styles.configIcon}
-                  onClick={addQuotationHandler}
-                />
+                <AnimatePresence mode="sync">
+                  {linerDropdown && (
+                    <div className={styles.dropdown}>
+                      <div onClick={addLinerElementHandler}>
+                        <span>Header</span>
+                      </div>
+                      <div onClick={addLinerElementHandler}>
+                        <span>Paragraph</span>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
+                <div className={styles.configs}>
+                  <FiSettings
+                    className={`${styles.configIcon} ${styles.settings}`}
+                    onClick={() => setLinerDropdown(true)}
+                  />
+                  <BsCheckLg
+                    className={styles.configIcon}
+                    onClick={addLinerContent}
+                  />
+                </div>
+              </div>
+              <div>
+                {isTemplateEditable && (
+                  <Button
+                    onClick={() => setLinerDetailsPropsVisible(true)}
+                    label="Customize"
+                    className={styles.editButton}
+                  >
+                    <FaPaintBrush />
+                  </Button>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
         {linerDetails.length > 0 && (
-          <MetaLeveContainer
-            ref={linerDetailsRef}
-            onClick={handleLinerDetailsSection}
-          >
+          <MetaLeveContainer ref={linerDetailsRef}>
             <AnimatePresence mode="sync">
               {linerDetails.map((data, index) => (
                 <Meta
@@ -828,6 +895,33 @@ const Screen = ({
         setIsTemplateEditable={setIsTemplateEditable}
         isTemplateEditable={isTemplateEditable}
       />
+
+      <FooterData
+        isTemplateEditable={isTemplateEditable}
+        selectedFooterPoints={selectedFooterPoints}
+        setSelectedFooterPoints={setSelectedFooterPoints}
+      />
+
+      <div className={styles.previewBtn}>
+        <Button
+          label="Edit"
+          onClick={() => {
+            setIsTemplateEditable(true);
+            setPreview(true);
+          }}
+        >
+          <LuEdit2 />
+        </Button>
+        <Button
+          label="Set Preview"
+          onClick={() => {
+            setIsTemplateEditable(false);
+            setPreview(true);
+          }}
+        >
+          <VscPreview />
+        </Button>
+      </div>
     </ScreenContainer>
   );
 };

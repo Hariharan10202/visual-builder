@@ -6,6 +6,7 @@ import { MultiSelect } from "primereact/multiselect";
 import HeaderController from "../HeaderController/HeaderController";
 
 import { Checkbox } from "primereact/checkbox";
+import FooterMultiSelect from "../FooterMultiSelect/FooterMultiSelect";
 
 const Navbar = ({
   setCompanyDetails,
@@ -26,6 +27,8 @@ const Navbar = ({
   setSelectedHeaderPoints,
   setIsTemplateEditable,
   isTemplateEditable,
+  selectedFooterPoints,
+  setSelectedFooterPoints,
 }) => {
   const [existing, setExisting] = useState([]);
   const [totalItems, setTotalItems] = useState([]);
@@ -166,6 +169,13 @@ const Navbar = ({
           <label htmlFor="editable" className="ml-2">
             Start Editing the template
           </label>
+        </div>
+        <div className={styles.multiselect}>
+          <label htmlFor="">Footer Items</label>
+          <FooterMultiSelect
+            selectedFooterPoints={selectedFooterPoints}
+            setSelectedFooterPoints={setSelectedFooterPoints}
+          />
         </div>
       </div>
     </div>

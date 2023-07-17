@@ -32,6 +32,8 @@ const Meta = ({
 
   const [isDataEditable, setIsDataEditable] = useState(false);
 
+  const [isLabelEditable, setIsLabelEditable] = useState(false);
+
   const [clickRemoved, setClickRemoved] = useState([]);
   const [index, setIndex] = useState(null);
 
@@ -203,12 +205,20 @@ const Meta = ({
     setIsDataEditable(true);
   };
 
+  const editLabelHandler = () => {
+    setIsLabelEditable(true);
+  };
+
   const handleInputBlur = () => {
     setIsDataEditable(false);
   };
 
   const handleChange = (e, obj) => {
     obj.val = e.target.value;
+  };
+
+  const handleLabelChange = (e, obj) => {
+    obj.label = e.target.value;
   };
 
   const handleKeyPress = (e) => {
@@ -224,20 +234,49 @@ const Meta = ({
     cursor: "drag",
   };
 
+  const dataPointRef = useRef(null);
+
+  const [canDrag, setCanDrag] = useState(false);
+
   return (
     <motion.div
-      // drag
-      // whileDrag={dragStyles}
-      // initial={{ scale: 0 }}
-      // animate={{ scale: 1 }}
-      // exit={{ scale: 0, opacity: 0 }}
-      // transition={{
-      //   duration: 0.2,
-      // }}
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      exit={{ scale: 0, opacity: 0 }}
+      transition={{
+        duration: 0.2,
+      }}
+      drag
+      layout
+      whileDrag={dragStyles}
+      dragElastic={0}
+      whileHover={{
+        backgroundColor: "rgba(0, 0, 0, 0.244)",
+        bordeRadius: "4px",
+      }}
+      ref={dataPointRef}
       className={styles.container}
       onMouseLeave={() => setEditableVisible(false)}
     >
-      <span ref={labelRef}>{label}</span>
+      {isLabelEditable ? (
+        <input
+          className={styles.editableData}
+          defaultValue={obj.label}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") setIsLabelEditable(false);
+          }}
+          onChange={(e) => handleLabelChange(e, obj)}
+          type="text"
+        />
+      ) : (
+        <span
+          onDoubleClick={editLabelHandler}
+          onBlur={handleInputBlur}
+          ref={labelRef}
+        >
+          {obj.label}
+        </span>
+      )}
       {isDataEditable ? (
         <input
           className={styles.editableData}

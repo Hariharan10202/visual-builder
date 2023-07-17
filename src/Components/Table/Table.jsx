@@ -135,7 +135,7 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
   };
 
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", padding: "20px 0" }}>
       <TableStyleModal visible={visible} setVisible={setVisible} />
       {isTemplateEditable && (
         <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>

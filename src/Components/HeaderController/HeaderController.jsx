@@ -1,27 +1,23 @@
 import React, { useEffect, useState } from "react";
 import styles from "./HeaderController.module.css";
 import { MultiSelect } from "primereact/multiselect";
-import { HeaderPoints, Points } from "../../headerDataPoint";
+import { HeaderPoints } from "../../headerDataPoint";
 import "../Sidebar/styles.css";
 
 const HeaderController = ({
   setSelectedHeaderPoints,
   selectedHeaderPoints,
 }) => {
-  const [data, setData] = useState([]);
-
   useEffect(() => {
-    setData(Points);
-  }, [Points]);
+    setSelectedHeaderPoints(HeaderPoints);
+  }, [HeaderPoints]);
 
   return (
     <MultiSelect
       value={selectedHeaderPoints}
-      options={data}
+      options={HeaderPoints}
       onChange={(e) => setSelectedHeaderPoints(e.value)}
       optionLabel="label"
-      optionGroupLabel="label"
-      optionGroupChildren="Meta"
       placeholder="Select Header Points"
       display="chip"
       className="w-full md:w-20rem"

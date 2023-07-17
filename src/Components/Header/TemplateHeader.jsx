@@ -6,7 +6,12 @@ import StylesModal from "../StylesModal/StylesModal";
 
 import { motion, AnimatePresence, useDragControls } from "framer-motion";
 
-const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
+const TemplateHeader = ({
+  selectedHeaderPoints,
+  setSelectedHeaderPoints,
+  headerVisibleProps,
+  setHeaderVisibleProps,
+}) => {
   const [logo, setLogo] = useState(null);
 
   const headerRef = useRef(null);
@@ -85,8 +90,6 @@ const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
     }
   }, [headerStyles]);
 
-  const [visible, setVisible] = useState(false);
-
   const companyLabelRef = useRef(null);
   const companyDataRef = useRef(null);
   const othersRef = useRef(null);
@@ -99,14 +102,6 @@ const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
     (item) => item.code === "CD"
   );
 
-  const showModalHandler = (e) => {
-    if (
-      e.target.className === "TemplateHeader_container__JkXqD" &&
-      e.target.className !== "TemplateHeader_eachDiv__v18Sk"
-    )
-      setVisible(true);
-  };
-
   const companyInfoRef = useRef(null);
 
   useEffect(() => {
@@ -117,19 +112,16 @@ const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
 
   const controls = useDragControls();
 
-  function startDrag(event) {
-    controls.start(event);
-  }
-
   const startDragHeader = (e) => {
     controls.start(e);
   };
 
   const dragStyles = {
-    scale: 1.1,
+    scale: 1,
     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.505)",
     zIndex: 999,
-    backgroundColor: "#ebe1e1",
+    backgroundColor: "rgba(0, 123, 255, 0.5)",
+    borderRadius: "6px",
     padding: 10,
     cursor: "drag",
   };
@@ -139,22 +131,17 @@ const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
       <StylesModal
         setStylesProps={setHeaderStyles}
         stylesProps={headerStyles}
-        setVisible={setVisible}
-        visible={visible}
+        setVisible={setHeaderVisibleProps}
+        visible={headerVisibleProps}
         header={false}
       />
-      <div
-        className={styles.container}
-        onClick={showModalHandler}
-        ref={headerRef}
-        // onPointerDown={startDrag}
-      >
+      <div className={styles.container} ref={headerRef}>
         <motion.div
           className={styles.logo}
           drag="x"
           dragConstraints={headerRef}
           whileDrag={dragStyles}
-          // dragControls={controls}
+          dragTransition={{ duration: 0 }}
         >
           <h1>Logo</h1>
         </motion.div>
@@ -193,7 +180,6 @@ const TemplateHeader = ({ selectedHeaderPoints, setSelectedHeaderPoints }) => {
               </div>
             )}
           </AnimatePresence>
-
           {companyDetails?.length !== 0 && (
             <div className={styles.companyDetails} ref={othersRef}>
               <AnimatePresence mode="sync">

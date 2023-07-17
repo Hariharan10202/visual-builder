@@ -5,7 +5,6 @@ export const ScreenContainer = styled.div`
   display: flex;
   width: 100%;
   padding: 20px;
-  row-gap: 10px;
   flex-wrap: wrap;
   height: 100vh;
   overflow-y: scroll;
@@ -15,6 +14,7 @@ export const MetaLevelWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: flex-start;
+  row-gap: 5px;
   flex-direction: column;
 `;
 
