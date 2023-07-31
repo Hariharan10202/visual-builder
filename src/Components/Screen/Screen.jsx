@@ -49,8 +49,6 @@ const Screen = ({
   isTemplateEditable,
   selectedFooterPoints,
   setSelectedFooterPoints,
-  setPreview,
-  preview,
 }) => {
   const companyDetailsRef = useRef(null);
   const quotationDetailsRef = useRef(null);
@@ -901,27 +899,6 @@ const Screen = ({
         selectedFooterPoints={selectedFooterPoints}
         setSelectedFooterPoints={setSelectedFooterPoints}
       />
-
-      <div className={styles.previewBtn}>
-        <Button
-          label="Edit"
-          onClick={() => {
-            setIsTemplateEditable(true);
-            setPreview(true);
-          }}
-        >
-          <LuEdit2 />
-        </Button>
-        <Button
-          label="Set Preview"
-          onClick={() => {
-            setIsTemplateEditable(false);
-            setPreview(true);
-          }}
-        >
-          <VscPreview />
-        </Button>
-      </div>
     </ScreenContainer>
   );
 };

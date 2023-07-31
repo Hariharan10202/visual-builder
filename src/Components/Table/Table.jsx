@@ -2,22 +2,41 @@ import React, { useEffect, useRef, useState } from "react";
 import { tableData } from "../../tableData";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { MultiSelect } from "primereact/multiselect";
 
-// import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-// import { Button } from "primereact/button";
-// import { BsFillTrash3Fill } from "react-icons/bs";
-// import { AiFillPlusCircle } from "react-icons/ai";
-// import { Dialog } from "primereact/dialog";
+import { MultiSelect } from "primereact/multiselect";
 
 import { Toolbar } from "primereact/toolbar";
 
 import "./table.css";
 import TableStyleModal from "../TableStyleModal/TableStyleModal";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "primereact/button";
+import { FaPaintBrush } from "react-icons/fa";
+import StyleModal from "../StylesModal/StylesModal";
 
-const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
+import styles from "./tableStyles.module.css";
+
+const Table = ({ isTemplateEditable }) => {
+  const [columnStyleProps, setColumnStyleProps] = useState({
+    backgroundColor: "#fff",
+    fontSize: "14",
+    fontStyle: "normal",
+    fontWeight: 500,
+    color: "#333",
+  });
+
+  const [subHeaderStyleProps, setSubHeaderStyleProps] = useState({
+    width: "100%",
+    fontSize: 16,
+    backgroundColor: "#E6DFDF",
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: "14",
+    fontStyle: "normal",
+    fontWeight: 500,
+    color: "#333",
+  });
+
   const [products, setProducts] = useState([]);
   const [product, setProduct] = useState([]);
 
@@ -33,23 +52,6 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
   }, []);
 
   const [visibleRows, setVisibleRows] = useState([]);
-
-  const subHeaderTemplate = (data) => {
-    return (
-      <div
-        style={{
-          width: "100%",
-          fontWeight: 600,
-          fontSize: "16px",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <span>{data.legName}</span>
-        <span>{data.amount_in_preferred_currency}</span>
-      </div>
-    );
-  };
 
   const footerTemplate = () => {
     return (
@@ -97,11 +99,9 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
 
   const leftToolbarTemplate = () => {
     return (
-      <div style={{ display: "flex", gap: "15px" }}>
-        <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
-          <span style={{ fontSize: "16px", fontWeight: "600" }}>
-            Showed Rows
-          </span>
+      <div className={styles.headerContainer}>
+        <div>
+          <span>Showed Rows</span>
           <MultiSelect
             value={visibleRows}
             onChange={deleteChargeHandler}
@@ -113,10 +113,8 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
             className="w-full md:w-20rem"
           />
         </div>
-        <div style={{ display: "flex", gap: "15px", flexDirection: "column" }}>
-          <span style={{ fontSize: "16px", fontWeight: "600" }}>
-            Showed Columns
-          </span>
+        <div>
+          <span>Showed Columns</span>
           <MultiSelect
             value={visibleColumns}
             options={columns}
@@ -126,17 +124,42 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
             display="chip"
           />
         </div>
+        <div className={styles.editButton}>
+          <Button label="Customize" onClick={() => setVisible(true)}>
+            <FaPaintBrush />
+          </Button>
+        </div>
       </div>
     );
   };
 
   const tableCustomizationHanlder = () => {
-    console.log(chargesTableRef.current);
+    console.log(chargesTableRef.current.props);
+  };
+
+  const reorderHandler = (e) => {
+    setVisibleRows(e.value);
+  };
+
+  const subHeaderTemplate = (data) => {
+    return (
+      <div style={subHeaderStyleProps}>
+        <span>{data.legName}</span>
+        <span>{data.amount_in_preferred_currency}</span>
+      </div>
+    );
   };
 
   return (
     <div style={{ width: "100%", padding: "20px 0" }}>
-      <TableStyleModal visible={visible} setVisible={setVisible} />
+      <TableStyleModal
+        subHeaderStyleProps={subHeaderStyleProps}
+        setSubHeaderStyleProps={setSubHeaderStyleProps}
+        columnStyleProps={columnStyleProps}
+        setColumnStyleProps={setColumnStyleProps}
+        visible={visible}
+        setVisible={setVisible}
+      />
       {isTemplateEditable && (
         <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
       )}
@@ -151,8 +174,10 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
         rowGroupHeaderTemplate={subHeaderTemplate}
         footer={footerTemplate}
         reorderableColumns
+        sortMode="single"
+        sortOrder={1}
         reorderableRows
-        onRowReorder={(e) => setVisibleRows(e.value)}
+        onRowReorder={reorderHandler}
         selection={selectedProducts}
         onSelectionChange={(e) => setSelectedProducts(e.value)}
         onClick={tableCustomizationHanlder}
@@ -162,7 +187,12 @@ const Table = ({ setIsTemplateEditable, isTemplateEditable }) => {
           style={{ display: isTemplateEditable ? "block" : "none" }}
         />
         {visibleColumns.map((col) => (
-          <Column key={col.field} field={col.field} header={col.header} />
+          <Column
+            style={columnStyleProps}
+            key={col.field}
+            field={col.field}
+            header={col.header}
+          />
         ))}
       </DataTable>
     </div>

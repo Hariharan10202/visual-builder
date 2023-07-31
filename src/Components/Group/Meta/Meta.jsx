@@ -226,17 +226,16 @@ const Meta = ({
   };
 
   const dragStyles = {
-    scale: 1.1,
+    scale: 1,
     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.505)",
-    zIndex: 999,
-    backgroundColor: "#ebe1e1",
+    backgroundColor: "rgba(0, 123, 255, 0.5)",
+    borderRadius: "6px",
     padding: 10,
     cursor: "drag",
+    zIndex: 999,
   };
 
   const dataPointRef = useRef(null);
-
-  const [canDrag, setCanDrag] = useState(false);
 
   return (
     <motion.div
@@ -246,13 +245,13 @@ const Meta = ({
       transition={{
         duration: 0.2,
       }}
-      drag
+      drag="x"
       layout
       whileDrag={dragStyles}
-      dragElastic={0}
       whileHover={{
         backgroundColor: "rgba(0, 0, 0, 0.244)",
         bordeRadius: "4px",
+        zIndex: 99,
       }}
       ref={dataPointRef}
       className={styles.container}
@@ -318,65 +317,75 @@ const Meta = ({
           )
         )}
       </span>
-      <OverlayPanel ref={removedItemsRight}>
-        {removedCompanyDetails?.length
-          ? removedCompanyDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))
-          : removedLinerDetails?.length
-          ? removedLinerDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))
-          : removedQuotationDetails?.length
-          ? removedQuotationDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))
-          : ""}
-      </OverlayPanel>
-      <OverlayPanel ref={removedItemsLeft}>
-        {removedCompanyDetails?.length
-          ? removedCompanyDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))
-          : removedLinerDetails?.length
-          ? removedLinerDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))
-          : removedQuotationDetails?.length &&
-            removedQuotationDetails.map((item, index) => (
-              <RemovedItems
-                // clickRemoved={clickRemoved}
-                setClickRemoved={setClickRemoved}
-                list={item}
-                key={index}
-              />
-            ))}
-      </OverlayPanel>
+
+      {(removedCompanyDetails.length > 0 ||
+        removedQuotationDetails.length > 0 ||
+        removedLinerDetails.length > 0) && (
+        <OverlayPanel ref={removedItemsRight}>
+          {removedCompanyDetails?.length
+            ? removedCompanyDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))
+            : removedLinerDetails?.length
+            ? removedLinerDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))
+            : removedQuotationDetails?.length
+            ? removedQuotationDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))
+            : ""}
+        </OverlayPanel>
+      )}
+
+      {(removedCompanyDetails.length > 0 ||
+        removedQuotationDetails.length > 0 ||
+        removedLinerDetails.length > 0) && (
+        <OverlayPanel ref={removedItemsLeft}>
+          {removedCompanyDetails?.length
+            ? removedCompanyDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))
+            : removedLinerDetails?.length
+            ? removedLinerDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))
+            : removedQuotationDetails?.length &&
+              removedQuotationDetails.map((item, index) => (
+                <RemovedItems
+                  // clickRemoved={clickRemoved}
+                  setClickRemoved={setClickRemoved}
+                  list={item}
+                  key={index}
+                />
+              ))}
+        </OverlayPanel>
+      )}
       <span
         className={`${styles.addIconContainer} ${styles.right}`}
         onClick={(e) => {

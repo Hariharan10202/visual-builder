@@ -3,11 +3,12 @@ import styles from "./Template.module.css";
 import Sidebar from "../Sidebar/Sidebar";
 import Screen from "../Screen/Screen";
 
-const Template = () => {
-  const [isTemplateEditable, setIsTemplateEditable] = useState(true);
-
-  const [preview, setPreview] = useState(false);
-
+const Template = ({
+  isTemplateEditable,
+  setIsTemplateEditable,
+  preview,
+  setPreview,
+}) => {
   const [selectedHeaderPoints, setSelectedHeaderPoints] = useState(null);
   const [selectedFooterPoints, setSelectedFooterPoints] = useState([]);
 
@@ -20,12 +21,6 @@ const Template = () => {
   const [removedCompanyDetails, setRemovedCompanyDetails] = useState([]);
   const [removedQuotationDetails, setRemovedQuotationDetails] = useState([]);
   const [removedLinerDetails, setRemovedLinerDetails] = useState([]);
-
-  // const [removedItems, setRemoveItems] = useState([]);
-
-  // console.log(companyDetails);
-  // console.log(quotationDetails);
-  // console.log(linerDetails);
 
   return (
     <div className={styles.container}>
